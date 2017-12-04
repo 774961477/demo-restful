@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Vendor: Pivotal Software, Inc.
+Implementation-Title: demo-restful
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: demo
+Build-Jdk: 1.7.0_80
+Built-By: shu
+Created-By: Maven Integration for Eclipse
+Implementation-URL: http://projects.spring.io/spring-boot/demo-restful
+ /
+

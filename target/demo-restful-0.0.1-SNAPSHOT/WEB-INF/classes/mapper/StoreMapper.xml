@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.StoreDao">
+	
+
+	<parameterMap id="Store" type="org.spring.springboot.domain.Store"/>
+
+	<sql id="Base_Column_List">
+		id,store_name,store_column,store_location,latitude,longitude,store_img_path,store_detail,store_discount,
+		top_flag,state,store_price,store_stars,create_user_id,create_time
+
+	</sql>
+
+	<insert id="saveStore" parameterMap="Store" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			sys_store(id,store_name,store_column,store_location,latitude,longitude,store_img_path,store_detail,store_discount,
+		top_flag,state,create_time,store_price,create_user_id)
+		values
+			(#{id},#{storeName},#{storeColumn},#{storeLocation},#{latitude},#{longitude},#{storeImgPath},
+			#{storeDetail},#{storeDiscount},'X','A',now(),#{storePrice},#{createUserId})
+	</insert>
+	
+	<select id="findAllStore" resultType="org.spring.springboot.domain.StoreDto" >
+		SELECT
+			a.id,
+			a.store_name,
+			a.store_column,
+			d.id column_parent_id,
+			b.column_name store_column_name,
+			a.store_location,
+			a.latitude,
+			a.longitude,
+			a.store_detail,
+			a.store_discount,
+			a.top_flag,
+			a.state,
+			a.create_time,
+			a.store_price,
+			a.store_stars,
+			a.create_user_id,
+			c.user_name create_user_name
+		
+		FROM
+			sys_store a
+		left join sys_column b on a.store_column = b.id
+		left join sys_column d on d.id = b.parent_id
+		left join sys_user c on c.id = a.create_user_id
+		WHERE
+			a.state = 'A'
+			<if test="storeColumn!=null and storeColumn!=''">
+				and b.id = #{storeColumn}
+			</if>
+			<if test="columnParentId!=null and columnParentId!=''">
+				and (d.id = #{columnParentId} or b.column_id = #{columnParentId})
+			</if>
+			<if test="topFlag!=null and topFlag!=''">
+				and  a.top_flag = #{topFlag}
+			</if>
+			<if test="createUserId!=null and createUserId!=''">
+				and  a.create_user_id = #{createUserId}
+			</if>
+		order by a.create_time desc,top_flag desc
+	</select>
+	
+	<select id="findStoreByColumnId" resultType="org.spring.springboot.domain.StoreDto" >
+		SELECT
+			a.id,
+			a.store_name,
+			a.store_img_path,
+			a.store_column,
+			b.column_name store_column_name,
+			a.store_location,
+			a.latitude,
+			a.longitude,
+			a.store_detail,
+			a.store_discount,
+			a.top_flag,
+			a.state,
+			a.create_time,
+			a.store_price,
+			a.store_stars
+		
+		FROM
+			sys_store a
+		left join sys_column b on a.store_column = b.id
+		WHERE
+			a.state = 'A'
+			<if test="columnId != null and columnId !=''">
+				and a.store_column = #{columnId}
+			</if>
+		order by a.create_time desc
+	</select>
+	<select id="findById" resultType="org.spring.springboot.domain.StoreDto" >
+		SELECT
+			a.id,
+			a.store_name,
+			a.store_img_path,
+			a.store_column,
+			d.id column_parent_id,
+			b.column_name store_column_name,
+			a.store_location,
+			a.latitude,
+			a.longitude,
+			a.store_detail,
+			a.store_discount,
+			a.top_flag,
+			a.state,
+			a.create_time,
+			a.store_price,
+			a.store_stars,
+			a.create_user_id,
+			c.user_name create_user_name
+		
+		FROM
+			sys_store a
+		left join sys_column b on a.store_column = b.id
+		left join sys_column d on d.id = b.parent_id
+		left join sys_user c on c.id = a.create_user_id
+		where a.state = 'A' and a.id = #{id}
+	</select>
+	<delete id="deleteStore">
+		update sys_store set state = 'X' where id = #{id}
+	</delete>
+	
+	<update id="editStore">
+		update sys_store 
+		set 
+		store_name = #{storeName},
+		store_column = #{storeColumn},
+		store_location = #{storeLocation},
+		latitude = #{latitude},
+		longitude = #{longitude},
+		store_img_path = #{storeImgPath},
+		store_detail = #{storeDetail},
+		store_discount = #{storeDiscount},
+		store_price = #{storePrice}
+ 		where id = #{id}
+	</update>
+	
+	<update id="topStore">
+		update sys_store 
+		set 
+		top_flag = #{topFlag}
+		
+ 		where id = #{id}
+	</update>
+	
+	<update id="updateStoreStars">
+		update sys_store 
+		set 
+		store_stars = #{storeStars}
+ 		where id = #{id}
+	</update>
+	
+	<select id="listPageForMobile" resultType="org.spring.springboot.domain.StoreDto" >
+		SELECT
+			a.id,
+			a.store_name,
+			a.store_img_path,
+			a.store_column,
+			d.id column_parent_id,
+			b.column_name store_column_name,
+			a.store_location,
+			a.latitude,
+			a.longitude,
+			a.store_detail,
+			a.store_discount,
+			a.top_flag,
+			a.state,
+			a.create_time,
+			a.store_price,
+			a.store_stars,
+			a.create_user_id,
+			c.user_name create_user_name,
+			(select count(1) from store_comment where store_id = a.id) comment_numbers
+		
+		FROM
+			sys_store a
+		left join sys_column b on a.store_column = b.id
+		left join sys_column d on d.id = b.parent_id
+		left join sys_user c on c.id = a.create_user_id
+		WHERE
+			a.state = 'A'
+			<if test="storeColumn!=null and storeColumn!=''">
+				and b.id = #{storeColumn}
+			</if>
+			<if test="columnParentId!=null and columnParentId!=''">
+				and (d.id = #{columnParentId} or b.id = #{columnParentId})
+			</if>
+			<if test="topFlag!=null and topFlag!=''">
+				and  a.top_flag = #{topFlag}
+			</if>
+		order by a.create_time desc
+	</select>
+	
+	 
+</mapper>

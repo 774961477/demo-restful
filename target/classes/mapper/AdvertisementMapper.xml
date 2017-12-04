@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.AdvertisementDao">
+	
+	<parameterMap id="Advertisement" type="org.spring.springboot.domain.Advertisement"/>
+	<sql id="Base_Column_List">
+		id,title,column_id,img_path,url,state,create_time
+	</sql>
+
+	<insert id="saveAdvertisement" parameterType="org.spring.springboot.domain.Advertisement" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			advertisement(id,title,column_id,img_path,url,state,create_time)
+		values
+			(#{id},#{title},#{columnId},#{imgPath},#{url},'A',now())
+	</insert>
+	
+	<select id="findAllAdvertisement" resultType="org.spring.springboot.domain.AdvertisementDto" >
+		select
+		a.id,a.title,a.column_id,a.img_path,a.url,a.state,b.column_name
+		from advertisement a 
+		left join sys_column b on a.column_id = b.id
+		where a.state = 'A'
+		order by a.create_time desc
+	</select>
+	<select id="findById" resultType="org.spring.springboot.domain.AdvertisementDto" >
+		select
+		a.id,a.title,a.column_id,a.img_path,a.url,a.state,b.column_name
+		from advertisement a 
+		left join sys_column b on a.column_id = b.id
+		where a.state = 'A' and a.id = #{id}
+	</select>
+	<select id="findByColumnId" resultType="org.spring.springboot.domain.AdvertisementDto" >
+		select
+		a.id,a.title,a.column_id,a.img_path,a.url,a.state,b.column_name
+		from advertisement a 
+		left join sys_column b on a.column_id = b.id
+		where a.state = 'A' and a.column_id = #{columnId}
+		order by a.create_time desc
+		limit 1
+	</select>
+	
+	<delete id="deleteAdvertisement">
+		update advertisement set state = 'X' where id = #{id}
+	</delete>
+	 
+</mapper>

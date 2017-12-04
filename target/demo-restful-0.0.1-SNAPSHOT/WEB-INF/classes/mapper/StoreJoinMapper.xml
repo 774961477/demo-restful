@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.StoreJoinDao">
+	
+
+	<parameterMap id="StoreJoin" type="org.spring.springboot.domain.StoreJoin"/>
+
+	<sql id="Base_Column_List">
+		id,store_name,store_phone,store_contact,send_message,create_time
+
+	</sql>
+
+	<insert id="saveStoreJoin" parameterMap="StoreJoin" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			store_join_info(id,form_id,open_id,store_name,store_phone,store_contact,send_message,create_time)
+		values
+			(#{id},#{formId},#{openId},#{storeName},#{storePhone},#{storeContact},'X',now())
+	</insert>
+	<update id="editStoreJoin">
+	update store_join_info set send_message ='A'  where id =#{id}
+	</update>
+	
+	
+	<select id="findAllStoreJoin" resultType="org.spring.springboot.domain.StoreJoin" >
+		SELECT
+			id,form_id,open_id,store_name,store_phone,store_contact,send_message,create_time
+		FROM
+			store_join_info	
+		order by create_time desc
+	</select>
+	
+</mapper>

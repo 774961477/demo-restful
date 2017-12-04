@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.StoreSignUpDao">
+	
+
+	<parameterMap id="StoreSignUp" type="org.spring.springboot.domain.StoreSignUp"/>
+
+	 
+
+	<insert id="saveStoreSign" parameterMap="StoreSignUp" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			store_sign(id,store_id,open_id,form_id,user_name,
+			user_phone,remark,state,create_time)
+		values
+			(#{id},#{storeId},#{openId},#{formId},#{userName},#{userPhone},
+			#{remark},'X',now())
+	</insert>
+	<update id="editStoreSign">
+		update store_sign set state = 'A' where id = #{id}
+	</update>
+	
+	<select id="findSignList" resultType="org.spring.springboot.domain.StoreSignUpDto" >
+		SELECT
+			a.id,
+			a.store_id,
+			a.open_id,
+			a.form_id,
+			a.user_name,
+			a.user_phone,
+			a.remark,
+			a.state,
+			a.create_time,
+			b.store_name,
+			b.store_img_path
+		FROM
+			store_sign a
+		LEFT JOIN sys_store b on a.store_id = b.id
+		where 1 = 1
+		<if test="openId != null and openId != ''">
+			and a.open_id = #{openId}
+		</if>
+		<if test="storeId != null and storeId != ''">
+			and a.store_id = #{storeId}
+		</if>
+		<if test="userId != null and userId != ''">
+			and b.create_user_id = #{userId}
+		</if>
+		
+		order by create_time desc
+	</select>
+	
+</mapper>

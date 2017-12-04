@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.RecruitDao">
+	
+
+	<parameterMap id="Recruit" type="org.spring.springboot.domain.Recruit"/>
+
+	<insert id="saveRecruit" parameterMap="Recruit" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			recruit(id,open_id,form_id,company_name,company_position,company_industry,salary,company_location,remark,state,create_time)
+		values
+			(#{id},#{openId},#{formId},#{companyName},#{companyPosition},#{companyIndustry},#{salary},#{companyLocation},#{remark},'A',now())
+	</insert>
+	
+	<select id="findRecruitList" resultType="org.spring.springboot.domain.RecruitDto" >
+		SELECT
+			a.id,
+			a.company_name,
+			a.company_position,
+			b.name company_position_name,
+			a.company_industry,
+			c.name company_industry_name,
+			a.salary,
+			a.company_location,
+			a.remark,
+			a.state,
+			a.create_time
+
+		FROM
+			recruit	a
+			left join sys_common b on a.company_position = b.code and b.type='ZW'
+			left join sys_common c on a.company_industry = c.code and c.type='HY'
+		WHERE a.state = 'A'
+		order by a.create_time desc
+	</select>
+	
+</mapper>

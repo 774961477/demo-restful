@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.MessageDao">
+	
+
+	<parameterMap id="Message" type="org.spring.springboot.domain.Message"/>
+
+	<sql id="Base_Column_List">
+		id,reply_id,open_id,content,flag,state,create_time
+	</sql>
+
+	<insert id="saveMessage" parameterMap="Message" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			sys_message(id,reply_id,open_id,form_id,content,flag,state,create_time)
+		values
+			(#{id},#{replyId},#{openId},#{formId},#{content},#{flag},'X',now())
+	</insert>
+	<update id="editMessage">
+		update sys_message set reply_id=#{replyId}, state ='A'  where id =#{id}
+	</update>
+	
+	
+	<select id="findMessage" resultType="org.spring.springboot.domain.Message" >
+		SELECT
+			a.id,a.reply_id,a.open_id,a.content question,b.content answer,a.flag,a.state,a.create_time
+		FROM
+			sys_message a
+			left join 	sys_message b on a.reply_id = b.id and b.flag ='A'
+		WHERE a.flag = 'Q'
+		<if test="openId != '' and openId != null">
+			and a.open_id = #{openId}
+		</if>
+		order by a.create_time desc
+	</select>
+	
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.ColumnDao">
+	
+
+	<parameterMap id="Column" type="org.spring.springboot.domain.Column"/>
+
+	<sql id="Base_Column_List">
+		id,parent_id,column_name,column_img_path,column_sort,state
+	</sql>
+
+	<insert id="saveColumn" parameterMap="Column" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			sys_column(id,parent_id,column_name,column_img_path,column_sort,state)
+		values
+			(#{id},#{parentId},#{columnName},#{columnImgPath},#{columnSort},'A')
+	</insert>
+	
+	<select id="findAllColumn" resultType="org.spring.springboot.domain.Column" >
+		select
+		a.id,a.parent_id,b.column_name columnParentName, a.column_name,a.column_img_path,a.column_sort,a.state
+		from sys_column a
+		left join sys_column b on b.id = a.parent_id
+		where a.state = 'A' 
+		
+		order by a.column_sort
+	</select>
+	<select id="findColumnByParentId" resultType="org.spring.springboot.domain.Column" >
+		select
+		a.id,a.parent_id,b.column_name columnParentName, a.column_name,a.column_img_path,a.column_sort,a.state
+		from sys_column a
+		left join sys_column b on b.id = a.parent_id
+		where a.state = 'A' 
+		<if test="parentId != null and parentId != ''">
+			and a.parent_id =#{parentId}
+		</if>
+		<if test="parentId == null or parentId == ''">
+			and a.parent_id is null
+		</if>
+		order by a.column_sort
+	</select>
+	
+	<select id="findById" resultType="org.spring.springboot.domain.Column" >
+		select
+		<include refid="Base_Column_List" />
+		from sys_column
+		where state = 'A' and id = #{id} order by column_sort
+	</select>
+	<delete id="deleteColumn">
+		update sys_column set state = 'X' where id = #{id}
+	</delete>
+	 
+</mapper>

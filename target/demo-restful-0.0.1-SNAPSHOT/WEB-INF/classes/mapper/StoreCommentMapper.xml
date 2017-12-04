@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.StoreCommentDao">
+	
+
+	<parameterMap id="StoreComment" type="org.spring.springboot.domain.StoreComment"/>
+
+	<sql id="Base_Column_List">
+		id,open_id,store_id,stars,comment,state,create_time
+	</sql>
+
+	<insert id="saveStoreComment" parameterMap="StoreComment" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			store_comment(id,open_id,store_id,stars,comment,state,create_time,form_id)
+		values
+			(#{id},#{openId},#{storeId},#{stars},#{comment},'A',now(),#{formId})
+	</insert>
+	
+	<select id="findCommentByStoreId" resultType="org.spring.springboot.domain.StoreCommentDto" >
+		select b.id,c.nick_name,c.avatar_url,b.create_time,b.stars,b.comment from sys_store a
+		left join store_comment b on a.id = b.store_id
+		left join wx_user c on c.open_id = b.open_id
+		where b.state = 'A'  and a.id = #{storeId}
+
+		order by b.create_time desc
+	</select>
+	
+</mapper>
