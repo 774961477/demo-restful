@@ -1,8 +1,15 @@
 package org.spring.springboot.controller;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.jeecgframework.poi.excel.ExcelExportUtil;
+import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.spring.springboot.common.utils.IdGenerator;
 import org.spring.springboot.domain.EduExp;
 import org.spring.springboot.domain.PageBounds;
@@ -97,4 +104,17 @@ public class ResumeController {
         PageInfo<Resume> pageInfo = new PageInfo<Resume>(list);
         return  pageInfo;
     }
+    
+    @RequestMapping("/download")  
+    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {  
+      // 告诉浏览器用什么软件可以打开此文件  
+      response.setHeader("content-Type", "application/vnd.ms-excel");  
+      // 下载文件的默认名称  
+      response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("简历数据表","UTF-8") + ".xls");  
+      //编码  
+      response.setCharacterEncoding("UTF-8");  
+      List<Resume> list = resumeService.listResumePage();  
+      Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), Resume.class, list);  
+      workbook.write(response.getOutputStream());  
+    }  
 }

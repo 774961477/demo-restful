@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.NoticeDao">
+	
+
+	<parameterMap id="Notice" type="org.spring.springboot.domain.Notice"/>
+
+	<sql id="Base_Column_List">
+		id,content,state,create_time
+	</sql>
+
+	<insert id="saveNotice" parameterMap="Notice" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			sys_notice(id,content,state,create_time)
+		values
+			(#{id},#{content},'A',now())
+	</insert>
+	
+	<delete id="deleteNotice">
+		update sys_notice set state = 'X' where id = #{id}
+	</delete>
+	
+	<select id="findNoticeList" resultType="org.spring.springboot.domain.Notice" >
+		SELECT
+			a.id,a.content,a.state,a.create_time
+		FROM
+			sys_notice a
+		WHERE a.state ='A'
+		
+		order by a.create_time desc
+	</select>
+	
+</mapper>

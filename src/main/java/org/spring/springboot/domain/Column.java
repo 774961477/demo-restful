@@ -8,6 +8,7 @@ public class Column {
 	private String columnName;
 	private String columnParentName;
 	private String parentId;
+	private String type;
 	private String columnImgPath;
 	private String columnSort;
 	private String state;

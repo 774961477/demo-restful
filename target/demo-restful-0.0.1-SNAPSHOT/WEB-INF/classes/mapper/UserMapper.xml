@@ -6,7 +6,7 @@
 	<parameterMap id="User" type="org.spring.springboot.domain.User"/>
 
 	<sql id="Base_Column_List">
-		id,open_id,nick_name,gender,avatar_url,city,province,country,remark,create_time
+		id,open_id,nick_name,gender,avatar_url,city,province,country,phone,id_card,qq,remark,create_time
 	</sql>
 
 	<insert id="saveUser" parameterMap="User" useGeneratedKeys="true" keyProperty="id">
@@ -15,6 +15,22 @@
 		values
 			(#{id},#{openId},#{nickName},#{gender},#{avatarUrl},#{city},#{province},#{country},#{remark},now())
 	</insert>
+	<update id="editUser">
+	update wx_user
+	<set>
+		<if test="phone!=null">
+			phone = #{phone},
+		</if>
+		<if test="idCard!=null">
+			id_card = #{idCard},
+		</if>
+		<if test="qq!=null">
+			qq = #{qq},
+		</if>
+		
+	</set>
+	where open_id = #{openId}
+	</update>
 	
 	<select id="findAllUser" resultType="org.spring.springboot.domain.User" >
 		select

@@ -25,6 +25,7 @@
 			a.id,
 			a.store_name,
 			a.store_column,
+			a.store_img_path,
 			d.id column_parent_id,
 			b.column_name store_column_name,
 			a.store_location,
@@ -59,6 +60,9 @@
 			<if test="createUserId!=null and createUserId!=''">
 				and  a.create_user_id = #{createUserId}
 			</if>
+			<if test="storeName!=null and storeName!=''">
+				and  a.store_name like concat(#{storeName},'%')
+			</if>
 		order by a.create_time desc,top_flag desc
 	</select>
 	
@@ -88,7 +92,19 @@
 			<if test="columnId != null and columnId !=''">
 				and a.store_column = #{columnId}
 			</if>
-		order by a.create_time desc
+			<if test="sortBy == 0">
+				order by a.top_flag asc,a.create_time desc
+			</if>
+			<if test="sortBy == 1">
+				order by a.store_price desc,a.create_time desc
+			</if>
+			<if test="sortBy == 2">
+				order by a.store_price asc,a.create_time desc
+			</if>
+			<if test="sortBy == 3">
+				order by a.store_stars desc,a.create_time desc
+			</if>
+		
 	</select>
 	<select id="findById" resultType="org.spring.springboot.domain.StoreDto" >
 		SELECT
@@ -190,7 +206,20 @@
 			<if test="topFlag!=null and topFlag!=''">
 				and  a.top_flag = #{topFlag}
 			</if>
-		order by a.create_time desc
+		
+		
+			<if test="sortBy == 0">
+				order by a.top_flag asc,a.create_time desc
+			</if>
+			<if test="sortBy == 1">
+				order by a.store_price desc,a.create_time desc
+			</if>
+			<if test="sortBy == 2">
+				order by a.store_price asc,a.create_time desc
+			</if>
+			<if test="sortBy == 3">
+				order by a.store_stars desc,a.create_time desc
+			</if>
 	</select>
 	
 	 

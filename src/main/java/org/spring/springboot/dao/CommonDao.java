@@ -20,4 +20,6 @@ public interface CommonDao {
 
     Long saveCommon(Common common);
     
+    Long deleteCommon(Common common);
+    
 }

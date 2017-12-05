@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.spring.springboot.common.utils.IdGenerator;
 import org.spring.springboot.domain.Common;
-import org.spring.springboot.domain.PageBounds;
-import org.spring.springboot.domain.StoreJoin;
+import org.spring.springboot.domain.CommonPage;
+import org.spring.springboot.domain.Message;
 import org.spring.springboot.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +33,7 @@ public class CommonController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public void createCommon(@RequestBody Common common) {
     	common.setId(idGenerator.nextId());
+    	common.setCode(common.getId());
     	commonService.saveCommon(common);
     }
     
@@ -42,4 +43,21 @@ public class CommonController {
        
         return  list;
     }
+    
+    @RequestMapping(value = "/listPage", method = RequestMethod.POST)
+	public PageInfo<Common> listPage(@RequestBody CommonPage commonPage) {
+		PageHelper.startPage(commonPage.getPageNum(), commonPage.getPageSize());
+		Common common = new Common();
+		common.setType(commonPage.getType());
+		List<Common> list = commonService.findCommonList(common);
+		PageInfo<Common> pageInfo = new PageInfo<Common>(list);
+		return pageInfo;
+	}
+    
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public void delete(@RequestBody Common common) {
+		
+		 commonService.deleteCommon(common);
+		
+	}
 }

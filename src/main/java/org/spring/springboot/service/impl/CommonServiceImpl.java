@@ -29,5 +29,10 @@ public class CommonServiceImpl implements CommonService {
 		return commonDao.saveCommon(common);
 	}
 
+	@Override
+	public Long deleteCommon(Common common) {
+		return commonDao.deleteCommon(common);
+	}
+
 	
 }

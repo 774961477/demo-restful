@@ -10,6 +10,8 @@ public class Common {
 	private String id;
 	private String name;
 	private String code;
+	private String indCode;
+	private String indName;
 	private String type;
 	private String state;
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")

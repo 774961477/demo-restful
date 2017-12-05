@@ -6,14 +6,14 @@
 	<parameterMap id="Column" type="org.spring.springboot.domain.Column"/>
 
 	<sql id="Base_Column_List">
-		id,parent_id,column_name,column_img_path,column_sort,state
+		id,parent_id,type,column_name,column_img_path,column_sort,state
 	</sql>
 
 	<insert id="saveColumn" parameterMap="Column" useGeneratedKeys="true" keyProperty="id">
 		insert into
-			sys_column(id,parent_id,column_name,column_img_path,column_sort,state)
+			sys_column(id,parent_id,type,column_name,column_img_path,column_sort,state)
 		values
-			(#{id},#{parentId},#{columnName},#{columnImgPath},#{columnSort},'A')
+			(#{id},#{parentId},#{type},#{columnName},#{columnImgPath},#{columnSort},'A')
 	</insert>
 	
 	<select id="findAllColumn" resultType="org.spring.springboot.domain.Column" >
@@ -36,6 +36,9 @@
 		</if>
 		<if test="parentId == null or parentId == ''">
 			and a.parent_id is null
+		</if>
+		<if test="type != null and type != ''">
+			and a.type = #{type}
 		</if>
 		order by a.column_sort
 	</select>

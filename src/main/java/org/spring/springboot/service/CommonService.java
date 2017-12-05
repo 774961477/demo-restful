@@ -20,4 +20,6 @@ public interface CommonService {
 
     Long saveCommon(Common common);
     
+    Long deleteCommon(Common common);
+    
 }
