@@ -20,5 +20,9 @@ public interface ShiroUserService {
     Long saveShiroUser(ShiroUser User);
     
     List<ShiroUser> findShiroUser(String loginName,String password);
+    
+    List<ShiroUser> listShiroUser();
+    
+    void deletShiroUser(ShiroUser shiroUser);
  
 }

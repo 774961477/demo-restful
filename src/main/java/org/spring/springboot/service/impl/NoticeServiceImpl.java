@@ -2,6 +2,7 @@ package org.spring.springboot.service.impl;
 
 import java.util.List;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.spring.springboot.dao.NoticeDao;
 import org.spring.springboot.domain.Notice;
 import org.spring.springboot.service.NoticeService;
@@ -23,7 +24,10 @@ public class NoticeServiceImpl implements NoticeService {
 	public List<Notice> findNoticeList() {
 		return noticeDao.findNoticeList();
 	}
-
+	@Override
+	public Notice findNoticeById(Notice notice){
+		return noticeDao.findNoticeById(notice);
+	}
 	@Override
 	public Long saveNotice(Notice notice) {
 		return noticeDao.saveNotice(notice);

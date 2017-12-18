@@ -20,6 +20,7 @@ public interface StoreDao {
      */
     List<StoreDto> findAllStore(StoreDto storeDto);
     List<StoreDto> listPageForMobile(StoreDto storeDto);
+    List<StoreDto> listByDistance(StoreDto storeDto);
     /**
      * 根据城市 ID，获取城市信息
      *
@@ -33,6 +34,7 @@ public interface StoreDao {
     Long editStore(Store store);
     
     Long topStore(Store store); 
+    Long addCount(Store store); 
     
     Long updateStoreStars(Store store);
 

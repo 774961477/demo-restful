@@ -12,4 +12,6 @@ public class StorePage {
 	private String createUserId;
 	private String storeName;
 	private Integer sortBy;
+	private String latitude;
+	private String longitude;
 }

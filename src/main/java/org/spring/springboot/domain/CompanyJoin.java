@@ -8,11 +8,13 @@ import lombok.Data;
 @Data
 public class CompanyJoin {
 	private String id;
+	private String type;
 	private String openId;
 	private String formId;
 	private String companyName;
 	private String  companyPhone;
 	private String  companyContact;
+	private String  content;
 	private String  sendMessage;
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date  createTime;

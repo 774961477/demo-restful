@@ -35,9 +35,9 @@ public class ResumeServiceImpl implements ResumeService{
 	}
 
 	@Override
-	public List<Resume> listResumePage() {
+	public List<Resume> listResumePage(Resume resume) {
 		// TODO Auto-generated method stub
-		return resumeDao.listResumePage();
+		return resumeDao.listResumePage(resume);
 	}
 
 	@Override

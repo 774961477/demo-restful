@@ -8,10 +8,11 @@ import lombok.Data;
 @Data
 public class Notice {
 	private String id;
+	private String title;
 	private String content;
 	
 	private String state;
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
-	private Date create_time;
+	private Date createTime;
 
 }

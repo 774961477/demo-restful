@@ -27,6 +27,15 @@ public class ShiroUserServiceImpl implements ShiroUserService {
     public List<ShiroUser> findShiroUser(String loginName,String password){
         return UserDao.findShiroUser(loginName, password);
     }
+    public List<ShiroUser> listShiroUser(){
+        return UserDao.listShiroUser();
+    }
+	
+	public void deletShiroUser(ShiroUser shiroUser) {
+		UserDao.deletShiroUser(shiroUser);
+		
+	}
+    
 	
 
 }

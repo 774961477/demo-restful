@@ -11,9 +11,9 @@
 
 	<insert id="saveShiroUser" parameterMap="ShiroUser" useGeneratedKeys="true" keyProperty="id">
 		insert into
-			sys_user(id,user_name,password,role_id,state)
+			sys_user(id,user_name,login_name,password,role_id,state)
 		values
-			(#{id},#{userName},#{password},#{roleId},#{state})
+			(#{id},#{userName},#{loginName},#{password},#{roleId},'A')
 	</insert>
 	
 	<select id="findShiroUser" resultType="org.spring.springboot.domain.ShiroUser" >
@@ -22,6 +22,14 @@
 		from sys_user
 		where state = 'A' and login_name = #{loginName} and password = #{password}
 	</select>
-
+	<select id="listShiroUser" resultType="org.spring.springboot.domain.ShiroUser" >
+		select
+		<include refid="Base_Column_List" />
+		from sys_user
+		where state = 'A'
+	</select>
+	<delete id="deletShiroUser">
+		update sys_user set state ='X' where id =#{id}
+	</delete>
 	 
 </mapper>

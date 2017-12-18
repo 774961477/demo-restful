@@ -17,6 +17,8 @@ public class Store {
 	private String storeName;
 	private String storeColumn;
 	private String storeImgPath;
+	private String storePhone;
+	private String type;
 	private String storeLocation;
 	private String latitude;
 	private String longitude;
@@ -29,6 +31,6 @@ public class Store {
 	private String createUserId;
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date createTime;
-	
+	private Integer viewCount;
 	private Integer sortBy;
 }

@@ -20,6 +20,8 @@ public class StoreDto {
 	private String columnParentId;
 	private String storeColumnName;
 	private String storeLocation;
+	private String storePhone;
+	private String type;
 	private String latitude;
 	private String longitude;
 	private String storeDetail;
@@ -28,8 +30,10 @@ public class StoreDto {
 	private float storeStars;
 	private String topFlag;
 	private Integer sortBy;
+	private Integer viewCount;
 	private String createUserId;
 	private String state;
+	private String distance;
 	private int commentNumbers;
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date createTime;

@@ -23,4 +23,6 @@ public interface NoticeDao {
     
     Long deleteNotice(Notice notice);
     
+    Notice findNoticeById(Notice notice);
+    
 }

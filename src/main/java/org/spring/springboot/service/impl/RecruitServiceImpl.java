@@ -29,7 +29,11 @@ public class RecruitServiceImpl implements RecruitService {
 		// TODO Auto-generated method stub
 		return recruitDao.saveRecruit(recruit);
 	}
-
+	@Override
+	public RecruitDto findRecruitById(String id) {
+		// TODO Auto-generated method stub
+		return recruitDao.findRecruitById(id);
+	}
     
 	
 	

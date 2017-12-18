@@ -14,6 +14,9 @@ public class RecruitDto {
 	private String companyIndustry;
 	private String companyIndustryName;
 	private String salary;
+	private String salarys;
+	private String positions;
+	private String photos;
 	private String companyLocation;
 	private String remark;
 	private String state;

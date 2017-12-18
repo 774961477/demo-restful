@@ -2,6 +2,7 @@ package org.spring.springboot.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.spring.springboot.domain.Recruit;
 import org.spring.springboot.domain.RecruitDto;
 
@@ -20,5 +21,7 @@ public interface RecruitDao {
     List<RecruitDto> findRecruitList();
 
     Long saveRecruit(Recruit recruit);
+    
+    RecruitDto findRecruitById(@Param("id") String id);
     
 }

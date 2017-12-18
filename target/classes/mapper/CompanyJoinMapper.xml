@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.CompanyJoinDao">
+	
+
+	<parameterMap id="CompanyJoin" type="org.spring.springboot.domain.CompanyJoin"/>
+
+	<sql id="Base_Column_List">
+		id,company_name,company_phone,company_contact,content,create_time,type
+
+	</sql>
+
+	<insert id="saveCompanyJoin" parameterMap="CompanyJoin" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			company_join(id,type,form_id,open_id,company_name,company_phone,company_contact,send_message,content,create_time)
+		values
+			(#{id},#{type},#{formId},#{openId},#{companyName},#{companyPhone},#{companyContact},'X',#{content},now())
+	</insert>
+	<update id="editCompanyJoin">
+		update company_join set send_message ='A'  where id =#{id}
+	</update>
+	
+	
+	<select id="findAllCompanyJoin" resultType="org.spring.springboot.domain.CompanyJoin" >
+		SELECT
+			id,type,form_id,open_id,company_name,company_phone,company_contact,content,send_message,create_time
+		FROM
+			company_join	
+		order by create_time desc
+	</select>
+	
+</mapper>

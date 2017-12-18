@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.StationMessageDao">
+	
+
+	<parameterMap id="StationMessage" type="org.spring.springboot.domain.StationMessage"/>
+
+	<sql id="Base_Column_List">
+		id,user_id,title,content,state,create_time
+	</sql>
+
+	<insert id="saveMessage" parameterMap="StationMessage" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			station_message(id,user_id,user_name,title,content,state,create_time)
+		values
+			(#{id},#{userId},#{userName},#{title},#{content},'X',now())
+	</insert>
+	
+	<select id="findMessage" resultType="org.spring.springboot.domain.StationMessage" >
+		SELECT
+			id,user_id,user_name,title,content,state,create_time
+		FROM
+			station_message a
+		WHERE 1 = 1
+		<if test="userId!=null and userId !=''">
+			and a.user_id = #{userId}
+		</if>
+		order by a.create_time desc
+	</select>
+	<update id="editMessage">
+		update station_message set state = 'A'  where id = #{id}
+	</update>
+	
+	<select id="getMessageById" resultType="org.spring.springboot.domain.StationMessage" >
+		SELECT
+			id,user_id,user_name,title,content,state,create_time
+		FROM
+			station_message a
+		WHERE 1 = 1
+		<if test="userId!='' and userId!=null">
+			and a.user_id = #{user_id}
+		</if>
+		order by a.create_time desc
+	</select>
+	
+</mapper>

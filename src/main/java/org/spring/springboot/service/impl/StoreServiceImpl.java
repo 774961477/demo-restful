@@ -55,6 +55,11 @@ public class StoreServiceImpl implements StoreService {
 		return storeDao.topStore(store);
 	}
 	@Override
+	public Long addCount(Store store) {
+		// TODO Auto-generated method stub
+		return storeDao.addCount(store);
+	}
+	@Override
 	public Long deleteStore(String id) {
 		// TODO Auto-generated method stub
 		return storeDao.deleteStore(id);
@@ -71,6 +76,12 @@ public class StoreServiceImpl implements StoreService {
 	public List<StoreDto> listPageForMobile(StoreDto storeDto) {
 		// TODO Auto-generated method stub
 		return storeDao.listPageForMobile(storeDto);
+	}
+	
+	@Override
+	public List<StoreDto> listByDistance(StoreDto storeDto) {
+		// TODO Auto-generated method stub
+		return storeDao.listByDistance(storeDto);
 	}
 
 	

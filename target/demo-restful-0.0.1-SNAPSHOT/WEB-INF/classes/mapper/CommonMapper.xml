@@ -11,24 +11,32 @@
 
 	<insert id="saveCommon" parameterMap="Common" useGeneratedKeys="true" keyProperty="id">
 		insert into
-			sys_common(id,code,name,type,state,create_time)
+			sys_common(id,code,name,type,state,create_time,ind_code)
 		values
-			(#{id},#{code},#{name},#{type},'A',now())
+			(#{id},#{code},#{name},#{type},'A',now(),#{indCode})
 	</insert>
+	
+	<delete id="deleteCommon">
+		update sys_common set state = 'X' where id = #{id}
+	</delete>
 	
 	<select id="findCommonList" resultType="org.spring.springboot.domain.Common" >
 		SELECT
-			id,code,name,type,state,create_time
+			a.id,a.code,a.name,a.type,a.state,a.create_time,b.name ind_name
 		FROM
-			sys_common
-		WHERE state ='A'
+			sys_common a
+			left join sys_common b on a.ind_code = b.code and b.type='HY'
+		WHERE a.state ='A'
 		<if test="name!=null and name !=''">
-			and name = #{name}
+			and a.name = #{name}
 		</if>
 		<if test="type!=null and type !=''">
-			and type = #{type}
+			and a.type = #{type}
+		</if>
+		<if test="indCode!=null and indCode !=''">
+			and a.ind_code = #{indCode}
 		</if>	
-		order by create_time desc
+		order by a.create_time desc
 	</select>
 	
 </mapper>

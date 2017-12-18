@@ -44,4 +44,11 @@ public class RecruitController {
         PageInfo<RecruitDto> pageInfo = new PageInfo<RecruitDto>(list);
         return  pageInfo;
     }
+    
+    @RequestMapping(value = "/findRecruitById", method = RequestMethod.POST)
+    public RecruitDto findById(@RequestBody Recruit recruit) {
+       
+        RecruitDto recruitDto = recruitService.findRecruitById(recruit.getId());
+        return  recruitDto;
+    }
 }

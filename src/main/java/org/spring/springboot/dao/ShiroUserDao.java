@@ -14,4 +14,6 @@ public interface ShiroUserDao {
 
     Long saveShiroUser(ShiroUser user);
     List<ShiroUser> findShiroUser(@Param("loginName") String loginName,@Param("password") String password);
+    List<ShiroUser> listShiroUser();
+    Long deletShiroUser(ShiroUser user);
 }

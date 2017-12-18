@@ -21,6 +21,8 @@ public class ResumeDto {
 	private String location;
 	private String photo;
 	private String state;
+	private String work;
+	private String school;
 	private Date createTime;
 	
 	private List<WorkExp> workList;

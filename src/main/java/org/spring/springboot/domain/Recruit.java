@@ -14,6 +14,9 @@ public class Recruit {
 	private String companyPosition;
 	private String companyIndustry;
 	private String salary;
+	private String salarys;
+	private String positions;
+	private String photos;
 	private String companyLocation;
 	private String remark;
 	private String state;

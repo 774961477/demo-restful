@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.spring.springboot.common.utils.IdGenerator;
+import org.spring.springboot.domain.Common;
+import org.spring.springboot.domain.PageBounds;
 import org.spring.springboot.domain.ShiroUser;
 import org.spring.springboot.service.ShiroUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
 /**
  * 城市 Controller 实现 Restful HTTP 服务
  *
@@ -22,7 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class ShiroUserController {
-	
+	 @Autowired
+	    private IdGenerator idGenerator;
     @Autowired
     private ShiroUserService shiroUserService;
      
@@ -40,6 +46,25 @@ public class ShiroUserController {
     		map.put("code", "400");
     	}
     	return map;
+    }
+    @RequestMapping(value = "/shirouser/listPage", method = RequestMethod.POST)
+    public PageInfo<ShiroUser> listPage(@RequestBody PageBounds pageBounds) {
+    	PageHelper.startPage(pageBounds.getPageNum(), pageBounds.getPageSize());
+		
+		List<ShiroUser> list = shiroUserService.listShiroUser();
+		PageInfo<ShiroUser> pageInfo = new PageInfo<ShiroUser>(list);
+		return pageInfo;
+    }
+    
+    @RequestMapping(value = "/shirouser/delete", method = RequestMethod.POST)
+    public void delete (@RequestBody ShiroUser shiroUser) {
+    	 shiroUserService.deletShiroUser(shiroUser);
+    }
+    
+    @RequestMapping(value = "/shirouser/add", method = RequestMethod.POST)
+    public void addShiroUser (@RequestBody ShiroUser shiroUser) {
+    		shiroUser.setId(idGenerator.nextId());
+    	 shiroUserService.saveShiroUser(shiroUser);
     }
     
     

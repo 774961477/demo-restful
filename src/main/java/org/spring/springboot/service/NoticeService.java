@@ -17,6 +17,8 @@ public interface NoticeService {
      * @return
      */
     List<Notice> findNoticeList();
+    
+    Notice findNoticeById(Notice notice);
 
     Long saveNotice(Notice notice);
     

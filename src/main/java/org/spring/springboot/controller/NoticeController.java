@@ -42,7 +42,12 @@ public class NoticeController {
        
         return  list;
     }
-    
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    public Notice get(@RequestBody Notice notice) {
+        Notice notice2 = noticeService.findNoticeById(notice);
+       
+        return  notice2;
+    }
     
     
     @RequestMapping(value = "/delete", method = RequestMethod.POST)

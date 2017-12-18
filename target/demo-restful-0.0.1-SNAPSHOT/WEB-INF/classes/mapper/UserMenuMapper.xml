@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.springboot.dao.MenuDao">
+	
+
+	<parameterMap id="UserMenu" type="org.spring.springboot.domain.UserMenu"/>
+
+	<sql id="Base_Column_List">
+		id,user_id,menu_id
+	</sql>
+
+	<insert id="saveUserMenu" parameterMap="UserMenu" useGeneratedKeys="true" keyProperty="id">
+		insert into
+			sys_user_menu(id,user_id,menu_id)
+		values
+			(#{id},#{userId},#{menuId})
+	</insert>
+	<update id="deleteUserMenu">
+		delete from sys_user_menu where user_id = #{userId} and menu_id = #{menuId}
+	</update>
+	
+	
+	<select id="findMenuByUserId" resultType="org.spring.springboot.domain.UserMenu" >
+		SELECT
+			a.id,a.user_id,a.menu_id,b.menu_name
+		FROM
+			sys_user_menu a
+			left join 	sys_menu b on a.menu_id = b.id
+		WHERE 1 = 1
+		<if test="userId != '' and userId != null">
+			and a.user_id = #{userId}
+		</if>
+	</select>
+	
+	<select id="findMenu" resultType="org.spring.springboot.domain.Menu" >
+		SELECT
+			a.id,a.menu_name,a.menu_url
+		FROM
+			sys_menu a
+			
+		WHERE 1 = 1
+		 
+	</select>
+	
+</mapper>

@@ -10,11 +10,11 @@
 		keyProperty="id">
 		insert into
 		resume(id,open_id,form_id,user_name,phone,user_edu,position,
-		industry,salary,location,photo,state,create_time
+		industry,salary,location,photo,state,create_time,work,school
 		)
 		values
 		(#{id},#{openId},#{formId},#{userName},#{phone},#{userEdu},#{position},#{industry},#{salary},
-		#{location},#{photo},'A',now())
+		#{location},#{photo},'A',now(),#{work},#{school})
 	</insert>
 	<update id="editResume">
 		update resume
@@ -43,6 +43,12 @@
 			<if test=" location != '' and location != null ">
 				location = #{location},
 			</if>
+			<if test=" work != '' and work != null ">
+				work = #{work},
+			</if>
+			<if test=" school != '' and school != null ">
+				school = #{school},
+			</if>
 			<if test=" photo != null ">
 				photo = #{photo},
 			</if>
@@ -59,10 +65,20 @@
 		SELECT
 		a.id,a.open_id,a.form_id,a.user_name,a.phone,a.user_edu,a.position,
 		a.industry,a.salary,a.location,a.photo,a.state,a.create_time,
-		b.name position_name ,c.name industry_name
+		b.name position_name ,c.name industry_name,a.work,a.school
 		FROM resume a
 		left join sys_common b on a.position = b.code and b.type='ZW'
 		left join sys_common c on a.industry = c.code and c.type='HY'
+		where 1 = 1
+		<if test="industry!= null and industry!=''">
+			AND a.industry = #{industry}
+		</if>
+		<if test="startDate!= null">
+			<![CDATA[AND a.create_time >= #{startDate}]]> 
+		</if>
+		<if test="endDate!= null">
+			<![CDATA[AND a.create_time <= #{endDate}]]> 
+		</if>
 		order by
 		a.create_time desc
 	</select>
@@ -70,7 +86,7 @@
 		SELECT
 		a.id,a.open_id,a.form_id,a.user_name,a.phone,a.user_edu,a.position,
 		a.industry,a.salary,a.location,a.photo,a.state,a.create_time,
-		b.name position_name ,c.name industry_name
+		b.name position_name ,c.name industry_name,a.work,a.school
 		FROM resume a
 		left join sys_common b on a.position = b.code and b.type='ZW'
 		left join sys_common c on a.industry = c.code and c.type='HY'

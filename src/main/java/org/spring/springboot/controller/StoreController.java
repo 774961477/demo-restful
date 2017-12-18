@@ -1,5 +1,6 @@
 package org.spring.springboot.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +38,13 @@ public class StoreController {
     	store.setId(idGenerator.nextId());
     	storeService.saveStore(store);
     }
-    
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public List<StoreDto> list() {
+       
+    	StoreDto storeDto = new StoreDto();
+        List<StoreDto> list = storeService.findAllStore(storeDto);
+        return  list;
+    }
      
     
     @RequestMapping(value = "/listPage", method = RequestMethod.POST)
@@ -58,6 +65,12 @@ public class StoreController {
         }
         if(StringUtils.isNotBlank(storePage.getCreateUserId())){
         	storeDto.setCreateUserId(storePage.getCreateUserId());
+        }
+        if(StringUtils.isNotBlank(storePage.getLatitude())){
+        	storeDto.setLatitude(storePage.getLatitude());
+        }
+        if(StringUtils.isNotBlank(storePage.getLongitude())){
+        	storeDto.setLongitude(storePage.getLongitude());
         }
         List<StoreDto> list = storeService.findAllStore(storeDto);
         PageInfo<StoreDto> pageInfo = new PageInfo<StoreDto>(list);
@@ -86,6 +99,11 @@ public class StoreController {
     	storeService.topStore(store);
     }
     
+    @RequestMapping(value = "/addCount", method = RequestMethod.POST)
+    public void addCount(@RequestBody Store store) {
+    	storeService.addCount(store);
+    }
+    
     @RequestMapping(value = "/listPageByColumnId", method = RequestMethod.POST)
     public PageInfo<StoreDto> listPageByColumnId(@RequestBody StorePage storePage) {
         PageHelper.startPage(storePage.getPageNum(), storePage.getPageSize());
@@ -103,7 +121,21 @@ public class StoreController {
         if(null != storePage.getSortBy()){
         	storeDto.setSortBy(storePage.getSortBy());
         }
-        List<StoreDto> list = storeService.listPageForMobile(storeDto);
+        
+        if(StringUtils.isNotBlank(storePage.getLatitude())){
+        	storeDto.setLatitude(storePage.getLatitude());
+        }
+        if(StringUtils.isNotBlank(storePage.getLongitude())){
+        	storeDto.setLongitude(storePage.getLongitude());
+        }
+        
+        List<StoreDto> list = new ArrayList<StoreDto>();
+        if(null != storePage.getSortBy() && storePage.getSortBy() == 4){
+        	list = storeService.listByDistance(storeDto);
+        }else{
+        	list = storeService.listPageForMobile(storeDto);
+        }
+        
         PageInfo<StoreDto> pageInfo = new PageInfo<StoreDto>(list);
         return  pageInfo;
     }

@@ -19,7 +19,7 @@ public interface ResumeService {
 
 	public Resume findResumeByOpenId(String openId);
 
-	List<Resume> listResumePage();
+	List<Resume> listResumePage(Resume resume);
 
 	List<WorkExp> listWorkExpByOpenId(String openId);
 

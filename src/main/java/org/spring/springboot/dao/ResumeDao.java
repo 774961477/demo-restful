@@ -22,7 +22,7 @@ public interface ResumeDao {
 	 */
 	public Resume findResumeByOpenId(@Param("openId") String openId);
 
-	List<Resume> listResumePage();
+	List<Resume> listResumePage(Resume resume);
 
 	List<WorkExp> listWorkExpByOpenId(@Param("openId") String openId);
 

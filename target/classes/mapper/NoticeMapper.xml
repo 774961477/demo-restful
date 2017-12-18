@@ -6,14 +6,14 @@
 	<parameterMap id="Notice" type="org.spring.springboot.domain.Notice"/>
 
 	<sql id="Base_Column_List">
-		id,content,state,create_time
+		id,title,content,state,create_time
 	</sql>
 
 	<insert id="saveNotice" parameterMap="Notice" useGeneratedKeys="true" keyProperty="id">
 		insert into
-			sys_notice(id,content,state,create_time)
+			sys_notice(id,title,content,state,create_time)
 		values
-			(#{id},#{content},'A',now())
+			(#{id},#{title},#{content},'A',now())
 	</insert>
 	
 	<delete id="deleteNotice">
@@ -22,12 +22,21 @@
 	
 	<select id="findNoticeList" resultType="org.spring.springboot.domain.Notice" >
 		SELECT
-			a.id,a.content,a.state,a.create_time
+			a.id,a.title,a.content,a.state,a.create_time
 		FROM
 			sys_notice a
 		WHERE a.state ='A'
 		
 		order by a.create_time desc
 	</select>
+	<select id="findNoticeById" resultType="org.spring.springboot.domain.Notice" >
+		SELECT
+			a.id,a.title,a.content,a.state,a.create_time
+		FROM
+			sys_notice a
+		WHERE id = #{id}
+		
+	</select>
+	
 	
 </mapper>

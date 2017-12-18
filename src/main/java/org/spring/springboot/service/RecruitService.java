@@ -21,4 +21,6 @@ public interface RecruitService {
 
     Long saveRecruit(Recruit recruit);
     
+    RecruitDto findRecruitById(String id);
+    
 }

@@ -21,6 +21,7 @@ public interface StoreService {
     List<StoreDto> findAllStore(StoreDto storeDto);
     
     List<StoreDto> listPageForMobile(StoreDto storeDto);
+    List<StoreDto> listByDistance(StoreDto storeDto);
 
     /**
      * 根据城市 ID,查询城市信息
@@ -39,6 +40,7 @@ public interface StoreService {
     Long saveStore(Store store);
     
     Long topStore(Store store);
+    Long addCount(Store store);
     
     Long editStore(Store store);
     

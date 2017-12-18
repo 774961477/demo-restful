@@ -7,17 +7,17 @@
 
 	<sql id="Base_Column_List">
 		id,store_name,store_column,store_location,latitude,longitude,store_img_path,store_detail,store_discount,
-		top_flag,state,store_price,store_stars,create_user_id,create_time
+		top_flag,state,store_price,store_stars,create_user_id,create_time,view_count,store_phone
 
 	</sql>
 
 	<insert id="saveStore" parameterMap="Store" useGeneratedKeys="true" keyProperty="id">
 		insert into
 			sys_store(id,store_name,store_column,store_location,latitude,longitude,store_img_path,store_detail,store_discount,
-		top_flag,state,create_time,store_price,create_user_id)
+		top_flag,state,create_time,store_price,create_user_id,view_count,store_phone)
 		values
 			(#{id},#{storeName},#{storeColumn},#{storeLocation},#{latitude},#{longitude},#{storeImgPath},
-			#{storeDetail},#{storeDiscount},'X','A',now(),#{storePrice},#{createUserId})
+			#{storeDetail},#{storeDiscount},'X','A',now(),#{storePrice},#{createUserId},#{viewCount},#{storePhone})
 	</insert>
 	
 	<select id="findAllStore" resultType="org.spring.springboot.domain.StoreDto" >
@@ -34,12 +34,15 @@
 			a.store_detail,
 			a.store_discount,
 			a.top_flag,
+			a.view_count,
 			a.state,
 			a.create_time,
 			a.store_price,
 			a.store_stars,
 			a.create_user_id,
-			c.user_name create_user_name
+			c.user_name create_user_name,
+			b.type,
+			a.store_phone
 		
 		FROM
 			sys_store a
@@ -82,7 +85,10 @@
 			a.state,
 			a.create_time,
 			a.store_price,
-			a.store_stars
+			a.view_count,
+			a.store_stars,
+			b.type,
+			a.store_phone
 		
 		FROM
 			sys_store a
@@ -124,8 +130,11 @@
 			a.create_time,
 			a.store_price,
 			a.store_stars,
+			a.view_count,
 			a.create_user_id,
-			c.user_name create_user_name
+			c.user_name create_user_name,
+			b.type,
+			a.store_phone
 		
 		FROM
 			sys_store a
@@ -149,7 +158,9 @@
 		store_img_path = #{storeImgPath},
 		store_detail = #{storeDetail},
 		store_discount = #{storeDiscount},
-		store_price = #{storePrice}
+		store_price = #{storePrice},
+		view_count = #{viewCount},
+		store_phone = #{storePhone}
  		where id = #{id}
 	</update>
 	
@@ -157,6 +168,14 @@
 		update sys_store 
 		set 
 		top_flag = #{topFlag}
+		
+ 		where id = #{id}
+	</update>
+	
+	<update id="addCount">
+		update sys_store 
+		set 
+		view_count = view_count + 1
 		
  		where id = #{id}
 	</update>
@@ -186,9 +205,19 @@
 			a.create_time,
 			a.store_price,
 			a.store_stars,
+			a.view_count,
 			a.create_user_id,
 			c.user_name create_user_name,
-			(select count(1) from store_comment where store_id = a.id) comment_numbers
+			(select count(1) from store_comment where store_id = a.id) comment_numbers,
+			cast(acos(
+				cos(cast(#{latitude} AS DECIMAL(20, 6)) * pi() / 180) * cos(cast(latitude AS DECIMAL(20, 6)) * pi() / 180) * cos(
+					cast(#{longitude} AS DECIMAL(20, 6)) * pi() / 180 - CAST(a.longitude AS DECIMAL(20, 6)) * pi() / 180
+				) + sin(cast(#{latitude} AS DECIMAL(20, 6)) * pi() / 180) * sin(
+					CAST(a.latitude AS DECIMAL(20, 6)) * pi() / 180
+				)
+			) * 6370996.81 / 1000 AS DECIMAL(20, 2)) as distance,
+			b.type,
+			a.store_phone
 		
 		FROM
 			sys_store a
@@ -219,6 +248,72 @@
 			</if>
 			<if test="sortBy == 3">
 				order by a.store_stars desc,a.create_time desc
+			</if>
+	</select>
+	
+	<select id="listByDistance" resultType="org.spring.springboot.domain.StoreDto" >
+		SELECT
+			a.id,
+			a.store_name,
+			a.store_img_path,
+			a.store_column,
+			d.id column_parent_id,
+			b.column_name store_column_name,
+			a.store_location,
+			a.latitude,
+			a.longitude,
+			a.store_detail,
+			a.store_discount,
+			a.top_flag,
+			a.state,
+			a.create_time,
+			a.store_price,
+			a.store_stars,
+			a.create_user_id,
+			c.user_name create_user_name,
+			(select count(1) from store_comment where store_id = a.id) comment_numbers,
+			cast(acos(
+				cos(cast(#{latitude} AS DECIMAL(20, 6)) * pi() / 180) * cos(cast(latitude AS DECIMAL(20, 6)) * pi() / 180) * cos(
+					cast(#{longitude} AS DECIMAL(20, 6)) * pi() / 180 - CAST(a.longitude AS DECIMAL(20, 6)) * pi() / 180
+				) + sin(cast(#{latitude} AS DECIMAL(20, 6)) * pi() / 180) * sin(
+					CAST(a.latitude AS DECIMAL(20, 6)) * pi() / 180
+				)
+			) * 6370996.81 / 1000 AS DECIMAL(20, 2)) as distance,
+			b.type,
+			a.store_phone
+		
+		FROM
+			sys_store a
+		left join sys_column b on a.store_column = b.id
+		left join sys_column d on d.id = b.parent_id
+		left join sys_user c on c.id = a.create_user_id
+		WHERE
+			a.state = 'A'
+			<if test="storeColumn!=null and storeColumn!=''">
+				and b.id = #{storeColumn}
+			</if>
+			<if test="columnParentId!=null and columnParentId!=''">
+				and (d.id = #{columnParentId} or b.id = #{columnParentId})
+			</if>
+			<if test="topFlag!=null and topFlag!=''">
+				and  a.top_flag = #{topFlag}
+			</if>
+		
+		
+			<if test="sortBy == 0">
+				order by a.top_flag asc,a.create_time desc
+			</if>
+			<if test="sortBy == 1">
+				order by a.store_price desc,a.create_time desc
+			</if>
+			<if test="sortBy == 2">
+				order by a.store_price asc,a.create_time desc
+			</if>
+			<if test="sortBy == 3">
+				order by a.store_stars desc,a.create_time desc
+			</if>
+			<if test="sortBy == 4">
+				order by distance asc,a.create_time desc
 			</if>
 	</select>
 	
